@@ -1,18 +1,24 @@
 import { getCurrentUser } from "@/lib/appwrite/api";
-import { IUser } from "@/types";
 import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const INITIAL_USER = {
+const INITIAL_USER = {
   id: "",
   name: "",
   username: "",
   email: "",
   imageUrl: "",
   bio: "",
-} as const;
+};
 
-type UserType = typeof INITIAL_USER;
+type UserType = {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  imageUrl: string;
+  bio: string;
+};
 
 interface AuthContextType {
   user: UserType;
@@ -35,7 +41,7 @@ const INITIAL_STATE: AuthContextType = {
 const AuthContext = createContext(INITIAL_STATE);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<IUser>(INITIAL_USER);
+  const [user, setUser] = useState<UserType>(INITIAL_USER);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
