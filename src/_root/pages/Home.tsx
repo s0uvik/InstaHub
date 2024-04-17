@@ -24,7 +24,7 @@ const Home = () => {
             </ul>
           )}
           {isError && (
-            <p className="text-red-500 text-center font-bold">
+            <p className=" text-red text-center font-bold">
               Something went wrong
             </p>
           )}
