@@ -8,7 +8,7 @@ const TopBar = () => {
   const { mutate: signOut, isSuccess } = useSignOutAccount();
   const navigate = useNavigate();
 
-  const {user}= useUserContext()
+  const { user } = useUserContext();
 
   useEffect(() => {
     if (isSuccess) {
@@ -16,12 +16,17 @@ const TopBar = () => {
     }
   }, [isSuccess, navigate]);
 
-  
   return (
     <section className="topbar">
       <div className="flex justify-between items-center w-full py-4 px-5">
-        <Link to="/" className="flex gap-3 items-center">
-          <img src="/assets/images/logo.svg" alt="logo" width={130} height={325} />
+        <Link to="/" className="flex gap-2 items-center">
+          <img
+            src="/assets/images/logo.png"
+            alt="logo"
+            width={35}
+            height={35}
+          />{" "}
+          <h3 className=" text-2xl font-semibold">InstaHub</h3>
         </Link>
 
         <div className="flex gap-4">
@@ -29,7 +34,11 @@ const TopBar = () => {
             <img src="/assets/icons/logout.svg" alt="logout" />
           </Button>
           <Link to={`profile/${user.id}`} className="flex-center">
-            <img src={user.imageUrl || "/assets/images/profile.png"} alt="profile" className="h-10 w-10 rounded-full" />
+            <img
+              src={user.imageUrl || "/assets/icons/profile-placeholder.svg"}
+              alt="profile"
+              className="h-10 w-10 rounded-full"
+            />
           </Link>
         </div>
       </div>
