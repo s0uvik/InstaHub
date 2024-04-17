@@ -26,7 +26,7 @@ export async function createUserAccount(user: INewUser) {
 
     return newUser;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: createUserAccount :: ", error);
     return error;
   }
 }
@@ -47,7 +47,7 @@ export async function saveUserToDB(user: {
     );
     return newUser;
   } catch (error) {
-    console.log("Error in Save User To db", error);
+    console.error("Appwrite error :: saveUserToDB :: ", error);
     return null;
   }
 }
@@ -57,7 +57,7 @@ export async function signInAccount(user: { email: string; password: string }) {
     const session = await account.createEmailSession(user.email, user.password);
     return session;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: signInAccount :: ", error);
     return null;
   }
 }
@@ -78,7 +78,7 @@ export async function getCurrentUser() {
 
     return currentUser.documents[0];
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: getCurrentUser :: ", error);
     return null;
   }
 }
@@ -88,7 +88,7 @@ export async function signOutAccount() {
     const session = await account.deleteSession("current");
     return session;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: signOutAccount :: ", error);
     return null;
   }
 }
@@ -132,7 +132,7 @@ export async function createPost(post: INewPost) {
 
     return newPost;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: createPost :: ", error);
   }
 }
 
@@ -146,7 +146,7 @@ export async function uploadFile(file: File) {
 
     return uploadedFile;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: uploadFile :: ", error);
   }
 }
 
@@ -165,7 +165,7 @@ export function getFilePreview(fileId: string) {
 
     return fileUrl;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: getFilePreview :: ", error);
   }
 }
 
@@ -175,7 +175,7 @@ export async function deleteFile(fileId: string) {
 
     return { status: "ok" };
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: deleteFile :: ", error);
   }
 }
 
@@ -191,8 +191,7 @@ export async function getRecentPosts() {
 
     return posts;
   } catch (error) {
-    console.error("Appwrite error :: getRecentPosts :: ",error);
-    
+    console.error("Appwrite error :: getRecentPosts :: ", error);
   }
 }
 
@@ -210,7 +209,7 @@ export async function likePost(postId: string, likeArray: string[]) {
 
     return updatedPost;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: likePost :: ", error);
   }
 }
 
@@ -229,7 +228,7 @@ export async function savePost(postId: string, userId: string) {
 
     return updatedPost;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: savePost :: ", error);
   }
 }
 
@@ -244,7 +243,7 @@ export async function deleteSavePost(savePostId: string) {
 
     return { status: "ok" };
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: deleteSavePost :: ", error);
   }
 }
 
@@ -260,7 +259,7 @@ export async function getPostById(postId: string) {
 
     return post;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: getPostById :: ", error);
   }
 }
 
@@ -323,12 +322,12 @@ export async function updatePost(post: IUpdatePost) {
 
     return updatedPost;
   } catch (error) {
-    console.log(error);
+    console.error("Appwrite error :: updatePost :: ", error);
   }
 }
 
 export async function deletePost(postId: string, imageId: string) {
-  if(!postId || !imageId) return;
+  if (!postId || !imageId) return;
   try {
     await databases.deleteDocument(
       appwriteConfig.databaseId,
@@ -338,7 +337,7 @@ export async function deletePost(postId: string, imageId: string) {
     await deleteFile(imageId);
     return { status: "ok" };
   } catch (error) {
-    console.error("Failed to delete post or image", error);
+    console.error("Appwrite error :: deletePost :: ", error);
     throw error; // or handle the error as needed
   }
 }

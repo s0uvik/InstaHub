@@ -39,8 +39,8 @@ const LeftSidebar = () => {
             className="h-10 w-10 rounded-full"
           />
           <div className="flex flex-col">
-            <p className="body-bold">user.name</p>
-            <p className="small-regular text-light-3">user.username</p>
+            <p className="body-bold">{user.name}</p>
+            <p className="small-regular text-light-3">{user.username}</p>
           </div>
         </Link>
 
