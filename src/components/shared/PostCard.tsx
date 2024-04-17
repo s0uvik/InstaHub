@@ -7,6 +7,8 @@ import PostStats from "./PostStats";
 const PostCard = ({ post }: { post: Models.Document }) => {
   const { user } = useUserContext();
 
+  console.log(post);
+
   if (!post.creator) return;
 
   return (
@@ -36,20 +38,24 @@ const PostCard = ({ post }: { post: Models.Document }) => {
           </Link>
         )}
       </div>
-      <Link to={`/post/${post.id}`}>
-        <div className=" small-medium lg:base-medium py5">
+      <Link to={`/post/${post.$id}`}>
+        <div className=" small-medium lg:base-medium py-5">
           <p className=" mt-2">{post.caption}</p>
           <ul className=" flex gap-1 mt-2">
             {post.tags.map((tag: string) => (
-              <li key={tag} className=" text-light-3">#{tag}</li>
+              <li key={tag} className=" text-light-3">
+                #{tag}
+              </li>
             ))}
           </ul>
         </div>
-        <img src={post.imageUrl || "/assets/icons/profile-placeholder.svg"} alt="post" 
-        className="post-card_img"
+        <img
+          src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
+          alt="post"
+          className="post-card_img"
         />
       </Link>
-      <PostStats post={post} userId = {user.id}/>
+      <PostStats post={post} userId={user.id} />
     </div>
   );
 };

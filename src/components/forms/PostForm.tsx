@@ -19,17 +19,25 @@ import { Models } from "appwrite";
 import { useUserContext } from "@/context/AuthContext";
 import { useToast } from "../ui/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
+import {
+  useCreatePost,
+  useUpdatePost,
+} from "@/lib/react-query/queriesAndMutations";
 
 type PostFormProps = {
   post?: Models.Document;
+  action: "Create" | "Update";
 };
 
-const PostForm = ({ post }: PostFormProps) => {
-  const { mutateAsync: createPost, isPending } = useCreatePost();
+const PostForm = ({ post, action }: PostFormProps) => {
+  const { mutateAsync: createPost, isPending: isPendingCreatePost } =
+    useCreatePost();
+  const { mutateAsync: updatePost, isPending: isPendingUpdatePost } =
+    useUpdatePost();
+
   const { user } = useUserContext();
   const { toast } = useToast();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof PostValidation>>({
@@ -44,16 +52,40 @@ const PostForm = ({ post }: PostFormProps) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PostValidation>) {
+    // Check if we are updating an existing post
+    if (post && action === "Update") {
+      // Attempt to update the post with the new values
+      await updatePost({
+        ...values,
+        postId: post?.$id,
+        imageId: post?.imageId,
+        imageUrl: post?.imageUrl,
+      });
+
+      // If the updatePost mutation does not exist, show a toast message
+      if (!updatePost) {
+        toast({
+          title: "Please try again",
+        });
+      }
+      // Navigate to the updated post's page
+      return navigate(`/post/${post.$id}`);
+    }
+
+    // If creating a new post, call the createPost function with form values and userId
     const newPost = await createPost({
       ...values,
       userId: user.id,
     });
+
+    // If the post creation fails, show a toast message
     if (!newPost) {
       toast({
         title: "Please try again",
       });
     } else {
-        navigate("/")
+      // On successful post creation, navigate to the home page
+      navigate("/");
     }
   }
 
@@ -135,8 +167,9 @@ const PostForm = ({ post }: PostFormProps) => {
           <Button
             type="submit"
             className=" shad-button_primary whitespace-nowrap"
+            disabled={isPendingCreatePost || isPendingUpdatePost}
           >
-            {isPending ? "Loading..." : "Post"}
+            {isPendingCreatePost || isPendingUpdatePost ? "Loading..." : `${action} Post`}
           </Button>
         </div>
       </form>
