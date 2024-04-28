@@ -12,9 +12,10 @@ const TopBar = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate(0);
+      navigate("/sign-in");
+      location.reload()
     }
-  }, [isSuccess, navigate]);
+  }, [isSuccess]);
 
   return (
     <section className="topbar">

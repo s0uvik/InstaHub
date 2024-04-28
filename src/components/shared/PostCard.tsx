@@ -7,8 +7,6 @@ import PostStats from "./PostStats";
 const PostCard = ({ post }: { post: Models.Document }) => {
   const { user } = useUserContext();
 
-  console.log(post);
-
   if (!post.creator) return;
 
   return (

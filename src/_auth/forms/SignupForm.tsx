@@ -27,6 +27,8 @@ const SignupForm = () => {
   const { checkAuthUser } = useUserContext();
   const navigate = useNavigate();
 
+  
+
   const { mutateAsync: createUserAccount, isPending: isCreatingUser } =
     useCreateUserAccount();
   const { mutateAsync: signInAccount } = useSignInAccount();
@@ -73,6 +75,7 @@ const SignupForm = () => {
       });
     }
   }
+
   return (
     <Form {...form}>
       <div className=" sm:w-420 flex-center flex-col">
@@ -85,7 +88,7 @@ const SignupForm = () => {
           />{" "}
           <h3 className=" text-3xl font-semibold">InstaHub</h3>
         </div>
-        <h2 className=" h3-bold pt-5 sm:pt-12">
+        <h2 className="pt-5 text-xl sm:pt-12">
           Create a new account
         </h2>
         <p className=" text-light-3 small-medium md:base-regular md:mt-2">

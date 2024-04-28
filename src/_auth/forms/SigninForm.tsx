@@ -70,7 +70,7 @@ const SigninForm = () => {
           />{" "}
           <h3 className=" text-2xl font-semibold">InstaHub</h3>
         </div>
-        <h2 className=" h3-bold pt-5 sm:pt-12">
+        <h2 className="pt-5 text-xl sm:pt-12">
           Login to your account
         </h2>
         <p className=" text-light-3 small-medium md:base-regular md:mt-2">
@@ -90,7 +90,7 @@ const SigninForm = () => {
                 <FormControl>
                   <Input type="text" className=" shad-input" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className=" text-red" />
               </FormItem>
             )}
           />
@@ -103,7 +103,7 @@ const SigninForm = () => {
                 <FormControl>
                   <Input type="password" className=" shad-input" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className=" text-red" />
               </FormItem>
             )}
           />
