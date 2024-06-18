@@ -11,7 +11,7 @@ const Profile = () => {
   if (!posts) return <Loader />;
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="profile-container">
       <header className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <img
@@ -24,7 +24,7 @@ const Profile = () => {
             <p className="text-gray-500">@{user.username}</p>
           </div>
         </div>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button className="bg-blue-500 text-white px-4 ml-10 py-2 rounded">
           Follow
         </button>
       </header>
@@ -34,27 +34,27 @@ const Profile = () => {
           <p className="font-semibold">{posts?.documents.length}</p>
           <p className="text-gray-500">Posts</p>
         </div>
-        <div className="text-center">
+        <div className="text-center ml-4">
           <p className="font-semibold">250</p>
           <p className="text-gray-500">Followers</p>
         </div>
-        <div className="text-center">
+        <div className="text-center ml-4">
           <p className="font-semibold">180</p>
           <p className="text-gray-500">Following</p>
         </div>
       </div>
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <h3 className="text-lg font-semibold">Bio</h3>
         <p className="text-gray-700">
           {user.bio
             ? `${user.bio}`
             : "This is a short bio description. It can span multiple lines and contain details about the user."}
         </p>
-      </div>
+      </div> */}
 
       <div className="mt-4">
-        <h3 className="text-lg font-semibold mb-1">My posts</h3>
+        <h3 className="text-lg font-semibold mb-1 text-center">My posts</h3>
         <hr className="mb-4 border-gray-800 border" />
         <GridPostList posts={posts?.documents} />
       </div>
