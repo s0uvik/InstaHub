@@ -8,6 +8,7 @@ import {
   getInfinitePosts,
   getPostById,
   getRecentPosts,
+  getUserPosts,
   likePost,
   savePost,
   searchPosts,
@@ -54,6 +55,13 @@ export const useGetRecentPosts = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
     queryFn: getRecentPosts,
+  });
+};
+
+export const useGetUserPosts = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_POSTS],
+    queryFn: () => getUserPosts(userId),
   });
 };
 

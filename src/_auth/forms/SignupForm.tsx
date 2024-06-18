@@ -78,7 +78,7 @@ const SignupForm = () => {
 
   return (
     <Form {...form}>
-      <div className=" sm:w-420 flex-center flex-col">
+      <div className=" sm:w-420 flex-center flex-col border rounded-lg p-4 border-gray-900">
       <div className=" flex gap-2 item-center">
           <img
             src="/assets/images/logo.png"

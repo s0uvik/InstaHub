@@ -78,7 +78,7 @@ export async function getCurrentUser() {
 
     return currentUser.documents[0];
   } catch (error) {
-    console.error("Appwrite error :: getCurrentUser :: ", error);
+    console.error("not logged in");
     return null;
   }
 }
@@ -185,6 +185,22 @@ export async function getRecentPosts() {
       appwriteConfig.databaseId,
       appwriteConfig.postsCollectionId,
       [Query.orderDesc("$createdAt"), Query.limit(20)]
+    );
+
+    if (!posts) throw new Error("No posts found");
+
+    return posts;
+  } catch (error) {
+    console.error("Appwrite error :: getRecentPosts :: ", error);
+  }
+}
+
+export async function getUserPosts(userId: string) {
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postsCollectionId,
+      [Query.equal("creator", userId),Query.orderDesc("$createdAt"), Query.limit(20)]
     );
 
     if (!posts) throw new Error("No posts found");
@@ -379,5 +395,6 @@ export async function searchPosts(searchTerm: string) {
     console.log("Appwrite error :: searchPosts ::", error);
   }
 }
+
 
 
