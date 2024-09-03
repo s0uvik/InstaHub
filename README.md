@@ -1,30 +1,68 @@
-# React + TypeScript + Vite
+# InstaHub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+InstaHub is a social media application built using React, TypeScript, and Vite, with Appwrite as the backend service. This setup provides a minimal configuration with hot module replacement (HMR) and some essential ESLint rules for a smooth development experience.
 
-Currently, two official plugins are available:
+## Getting Started
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
 
-## Expanding the ESLint configuration
+Before you begin, ensure you have the following installed on your local machine:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Node.js (v16 or later)
+- npm (v7 or later)
 
-- Configure the top-level `parserOptions` property like this:
+### Installation
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/your-username/instahub.git
+   cd InstaHub
+   ```
+
+2. **Install Dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set Up Environment Variables:**
+
+   - Copy the `.env.sample` file to create your own `.env` file:
+
+     ```bash
+     cp .env.sample .env
+     ```
+
+   - Update the `.env` file with your Appwrite credentials and any other necessary environment variables.
+
+4. **Start the Development Server:**
+
+   ```bash
+   npm run dev
+   ```
+
+   The application will be available at `http://localhost:5173`.
+
+## Building for Production
+
+To create a production build of the project:
+
+```bash
+npm run build
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+The build artifacts will be stored in the `dist/` directory.
+
+
+## Contributing
+
+If you'd like to contribute to InstaHub, please fork the repository and use a feature branch. Pull requests are warmly welcome.
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+This version of the README is simplified to use only `npm`. Let me know if you need any more changes!
