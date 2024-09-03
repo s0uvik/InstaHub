@@ -58,11 +58,3 @@ The build artifacts will be stored in the `dist/` directory.
 ## Contributing
 
 If you'd like to contribute to InstaHub, please fork the repository and use a feature branch. Pull requests are warmly welcome.
-
-## License
-
-This project is licensed under the MIT License.
-
----
-
-This version of the README is simplified to use only `npm`. Let me know if you need any more changes!
