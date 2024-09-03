@@ -372,13 +372,23 @@ export async function getInfinitePosts({ pageParam }: { pageParam: string | unde
       queries
     );
 
-    if (!posts) throw Error;
+    // Ensure that posts is always a valid DocumentList
+    if (!posts) {
+      throw new Error("No posts found");
+    }
 
     return posts;
   } catch (error) {
     console.error("Appwrite Error :: getInfinitePosts ::", error);
+    // Return an empty DocumentList or handle as per your application's requirements
+    return {
+      documents: [],
+      total: 0,
+      cursor: pageParam, // Ensure that cursor handling aligns with your requirements
+    };
   }
 }
+
 
 export async function searchPosts(searchTerm: string) {
   try {

@@ -28,8 +28,7 @@ export const useCreateUserAccount = () => {
 
 export const useSignInAccount = () => {
   return useMutation({
-    mutationFn: (user: { email: string; password: string }) =>
-      signInAccount(user),
+    mutationFn: (user: { email: string; password: string }) => signInAccount(user),
   });
 };
 
@@ -70,13 +69,8 @@ export const useLikePost = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      postId,
-      likeArray,
-    }: {
-      postId: string;
-      likeArray: string[];
-    }) => likePost(postId, likeArray),
+    mutationFn: ({ postId, likeArray }: { postId: string; likeArray: string[] }) =>
+      likePost(postId, likeArray),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
@@ -177,15 +171,15 @@ export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts,
-    getNextPageParam: (lastPage: Models.DocumentList<Models.Document>) => {
-
-      if (lastPage && lastPage.documents.length === 0) {
+    getNextPageParam: (lastPage: Models.DocumentList<Models.Document> | undefined) => {
+      if (!lastPage || lastPage.documents.length === 0) {
         return null;
       }
 
-      const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
+      const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
       return lastId;
     },
+    initialPageParam: undefined,
   });
 };
 
@@ -196,5 +190,3 @@ export const useSearchPosts = (searchTerm: string) => {
     enabled: !!searchTerm,
   });
 };
-
-
