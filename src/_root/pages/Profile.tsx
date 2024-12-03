@@ -4,6 +4,7 @@ import { useUserContext } from "@/context/AuthContext";
 import GridPostList from "@/components/shared/GridPostList";
 import { Loader } from "@/components/shared";
 import ShimmerProfile from "@/components/shimmer-ui/Profile";
+import RedirectToLogin from "@/components/shared/RedirectToLogin";
 
 const Profile = () => {
   const { id: userId } = useParams();
@@ -17,11 +18,7 @@ const Profile = () => {
   const { data: posts, isPending, isError } = useGetUserPosts(userId as string);
 
   if (loggedInUser.username === "guest" && userId === loggedInUser.id) {
-    return (
-      <div className="profile-container text-2xl font-semibold mt-4">
-        Please login to view your profile
-      </div>
-    );
+    return <RedirectToLogin message="Please login to view your profile" />;
   }
 
   return (

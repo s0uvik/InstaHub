@@ -1,4 +1,5 @@
 import PostStats from "@/components/shared/PostStats";
+import RedirectToLogin from "@/components/shared/RedirectToLogin";
 import ShimmerPostCard from "@/components/shimmer-ui/ShimmerPostCard";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetSavePost } from "@/lib/react-query/queriesAndMutations";
@@ -10,11 +11,7 @@ const Saved = () => {
   const { data: posts, isPending, isError } = useGetSavePost(user.id);
 
   if (user.username === "guest") {
-    return (
-      <div className="profile-container text-2xl font-semibold mt-4">
-        Please login to view saved Posts
-      </div>
-    );
+    return <RedirectToLogin message="Please login to view saved Posts" />;
   }
   return (
     <div className="common-container">

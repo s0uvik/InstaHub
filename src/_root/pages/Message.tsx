@@ -7,6 +7,8 @@ import { useGetMessages, useSendMessage } from "@/lib/react-query/queriesAndMuta
 import UsersList from "@/components/shared/message/UsersList";
 import ChatWindow from "@/components/shared/message/ChatWindow";
 import MessageInput from "@/components/shared/message/MessageInput";
+import { Button } from "@/components/ui/button";
+import RedirectToLogin from "@/components/shared/RedirectToLogin";
 
 const Message = () => {
   const [messageBody, setMessageBody] = useState("");
@@ -70,7 +72,9 @@ const Message = () => {
   const toggleUserList = () => {
     setIsUserListVisible(!isUserListVisible);
   };
-
+  if (user.username === "guest") {
+    return <RedirectToLogin message="Please login to access message section" />;
+  }
   if (!user?.id) return null;
 
   return (
