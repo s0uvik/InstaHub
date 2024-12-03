@@ -10,7 +10,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
   if (!post.creator) return;
 
   return (
-    <div className=" post-card">
+    <div className=" post-card border">
       <div className=" flex-between">
         <div className=" flex items-center gap-3">
           <Link to={`/profile/${post.creator.$id}`}>

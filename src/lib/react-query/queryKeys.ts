@@ -18,4 +18,8 @@ export enum QUERY_KEYS {
 
   //  SEARCH KEYS
   SEARCH_POSTS = "getSearchPosts",
+
+  // MESSAGE KEYS
+  GET_MESSAGES = "getMessages",
+  GET_CONVERSATIONS = "getConversations",
 }

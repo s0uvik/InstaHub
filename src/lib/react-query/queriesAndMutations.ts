@@ -221,3 +221,5 @@ export const useGetUserById = (userId: string) => {
     enabled: !!userId,
   });
 };
+
+// Message related queries and mutations

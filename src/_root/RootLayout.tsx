@@ -1,9 +1,10 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useUserContext } from "@/context/AuthContext";
 import { BottomBar, LeftSidebar, TopBar } from "@/components/shared";
 
 const RootLayout = () => {
   const { isAuthenticated } = useUserContext();
+  const { pathname } = useLocation();
 
   if (!isAuthenticated) return;
 
@@ -15,7 +16,7 @@ const RootLayout = () => {
       <section className=" flex flex-1 h-full">
         <Outlet />
       </section>
-      <BottomBar />
+      {pathname !== "/message" && <BottomBar />}
     </div>
   );
 };
