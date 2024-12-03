@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { SigninValidation } from "@/lib/validation";
-import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
+import { useCreateAnonymousSession, useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
 
 import {
@@ -25,7 +25,8 @@ const SigninForm = () => {
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
   const navigate = useNavigate();
 
-  const { mutateAsync: signInAccount } = useSignInAccount();
+  const { mutateAsync: signInAccount, isPending } = useSignInAccount();
+  const { mutateAsync: guestLogin, isPending: isGuestPending } = useCreateAnonymousSession();
 
   // Define form.
   const form = useForm<z.infer<typeof SigninValidation>>({
@@ -59,6 +60,20 @@ const SigninForm = () => {
       });
     }
   }
+
+  const handleGuestLogin = async () => {
+    try {
+      const res = await guestLogin();
+      if (res) {
+        navigate("/");
+        location.reload();
+      }
+    } catch (error) {
+      toast({
+        title: "Guest Login failed, please try again",
+      });
+    }
+  };
   return (
     <Form {...form}>
       <div className=" sm:w-420 flex-center flex-col border rounded-lg p-4 border-gray-900">
@@ -111,8 +126,8 @@ const SigninForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className=" shad-button_primary">
-            {isUserLoading ? <Loader /> : "Submit"}
+          <Button disabled={isPending} type="submit" className=" shad-button_primary">
+            {isPending ? <Loader /> : "Submit"}
           </Button>
           <p className=" text-small-regular text-light-2 text-center mt-2">
             Don't have an account?{" "}
@@ -121,6 +136,13 @@ const SigninForm = () => {
             </Link>
           </p>
         </form>
+        {isGuestPending ? (
+          <Loader />
+        ) : (
+          <button onClick={handleGuestLogin} className=" small-medium text-light-3 ">
+            Try InstaHub as a Guest
+          </button>
+        )}
       </div>
     </Form>
   );

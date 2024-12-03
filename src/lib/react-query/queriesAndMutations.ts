@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  createAnonymousSession,
   createPost,
   createUserAccount,
   deletePost,
@@ -32,6 +33,11 @@ export const useCreateUserAccount = () => {
 export const useSignInAccount = () => {
   return useMutation({
     mutationFn: (user: { email: string; password: string }) => signInAccount(user),
+  });
+};
+export const useCreateAnonymousSession = () => {
+  return useMutation({
+    mutationFn: createAnonymousSession,
   });
 };
 

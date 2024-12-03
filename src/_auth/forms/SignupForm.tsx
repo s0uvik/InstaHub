@@ -26,7 +26,7 @@ const SignupForm = () => {
   const navigate = useNavigate();
 
   const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccount();
-  const { mutateAsync: signInAccount } = useSignInAccount();
+  const { mutateAsync: signInAccount, isPending } = useSignInAccount();
 
   // Define form.
   const form = useForm<z.infer<typeof SignupValidation>>({
@@ -159,8 +159,8 @@ const SignupForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className=" shad-button_primary">
-            {isCreatingUser ? <Loader /> : "Submit"}
+          <Button disabled={isPending} type="submit" className=" shad-button_primary">
+            {isPending ? <Loader /> : "Submit"}
           </Button>
           <p className=" text-small-regular text-light-2 text-center mt-2">
             Already have an account?{" "}

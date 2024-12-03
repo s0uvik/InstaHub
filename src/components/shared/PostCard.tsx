@@ -51,7 +51,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
           className="post-card_img"
         />
       </Link>
-      <PostStats post={post} userId={user.id} />
+      {user.username !== "guest" && <PostStats post={post} userId={user.id} />}
     </div>
   );
 };

@@ -10,12 +10,18 @@ const Saved = () => {
   const { user } = useUserContext();
 
   const { data: posts, isPending, isError } = useGetSavePost(user.id);
-  console.log(posts);
+
+  if (user.username === "guest") {
+    return (
+      <div className="profile-container text-2xl font-semibold mt-4">
+        Please login to view saved Posts
+      </div>
+    );
+  }
   return (
     <div className="mt-4 common-container">
       <h2 className="h3-bold md:h2-bold w-full ">My saved Posts</h2>
       {isError && <p className="text-red-500 text-center mt-8">Something went wrong</p>}
-      {/* <ShimmerPostCard /> */}
       <hr className="mb-4 border-gray-800 border w-full" />
       {isPending ? (
         <ul className="grid-container">

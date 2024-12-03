@@ -16,6 +16,14 @@ const Profile = () => {
   } = useGetUserById(userId as string);
   const { data: posts, isPending, isError } = useGetUserPosts(userId as string);
 
+  if (loggedInUser.username === "guest" && userId === loggedInUser.id) {
+    return (
+      <div className="profile-container text-2xl font-semibold mt-4">
+        Please login to view your profile
+      </div>
+    );
+  }
+
   return (
     <div className="profile-container">
       <section className="">

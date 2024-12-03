@@ -47,9 +47,11 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof PostValidation>) {
-    // Check if we are updating an existing post
+    if (user.username === "guest") {
+      return alert("Please login to create a post");
+    }
+
     if (post && action === "Update") {
-      // Attempt to update the post with the new values
       await updatePost({
         ...values,
         postId: post?.$id,
@@ -57,13 +59,12 @@ const PostForm = ({ post, action }: PostFormProps) => {
         imageUrl: post?.imageUrl,
       });
 
-      // If the updatePost mutation does not exist, show a toast message
+      // If the updatePost mutation does not exist
       if (!updatePost) {
         toast({
           title: "Please try again",
         });
       }
-      // Navigate to the updated post's page
       return navigate(`/post/${post.$id}`);
     }
 
@@ -73,13 +74,11 @@ const PostForm = ({ post, action }: PostFormProps) => {
       userId: user.id,
     });
 
-    // If the post creation fails, show a toast message
     if (!newPost) {
       toast({
         title: "Please try again",
       });
     } else {
-      // On successful post creation, navigate to the home page
       navigate("/");
     }
   }
@@ -143,7 +142,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
           )}
         />
         <div className=" flex gap-4 items-center justify-end">
-          <Button type="button" className=" shad-button_dark_4">
+          <Button onClick={() => form.reset()} type="button" className=" shad-button_dark_4">
             Cancel
           </Button>
           <Button

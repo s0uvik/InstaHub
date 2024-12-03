@@ -8,7 +8,7 @@ import { INavLink } from "@/types";
 import { Button } from "../ui/button";
 
 const LeftSidebar = () => {
-  const { mutate: signOut, isSuccess } = useSignOutAccount();
+  const { mutate: signOut, isSuccess, isPending } = useSignOutAccount();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -60,9 +60,9 @@ const LeftSidebar = () => {
           })}
         </ul>
       </div>
-      <Button onClick={() => signOut()} className=" flex-start flex gap-3">
+      <Button onClick={() => signOut()} disabled={isPending} className=" flex-start flex gap-3">
         <img src="/assets/icons/logout.svg" alt="logout" />
-        <p className=" small-medium lg:base-medium">Logout</p>
+        <p className=" small-medium lg:base-medium">{isPending ? "Logging out..." : "Logout"}</p>
       </Button>
     </nav>
   );

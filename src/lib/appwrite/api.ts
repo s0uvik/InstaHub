@@ -57,12 +57,26 @@ export async function signInAccount(user: { email: string; password: string }) {
   }
 }
 
+export async function createAnonymousSession() {
+  try {
+    const session = await account.createAnonymousSession();
+    return session;
+  } catch (error) {
+    console.error("Appwrite error :: createAnonymousSession :: ", error);
+    return null;
+  }
+}
+
 export async function getCurrentUser() {
   try {
     const user = await account.get();
 
     if (!user) throw Error;
 
+    // this section is for guest user
+    if (user.$id && !user.email) {
+      return { ...user, name: "Guest", username: "guest", bio: "", imageUrl: "", save: [] };
+    }
     const currentUser = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.usersCollectionId,
