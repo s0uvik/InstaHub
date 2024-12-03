@@ -17,7 +17,7 @@ const Saved = () => {
     );
   }
   return (
-    <div className="mt-4 common-container">
+    <div className="common-container">
       <h2 className="h3-bold md:h2-bold w-full ">My saved Posts</h2>
       {isError && <p className="text-red-500 text-center mt-8">Something went wrong</p>}
       <hr className="mb-4 border-gray-800 border w-full" />

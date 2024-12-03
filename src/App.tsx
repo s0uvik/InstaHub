@@ -19,7 +19,7 @@ import {
 
 const App = () => {
   return (
-    <main className=" flex h-screen max-w-8xl mx-auto">
+    <main className=" flex h-screen max-w-[1800px] mx-auto">
       <Routes>
         {/* Public Routes */}
         <Route element={<AuthLayout />}>
