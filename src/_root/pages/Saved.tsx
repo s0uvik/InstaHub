@@ -1,5 +1,3 @@
-import { Loader } from "@/components/shared";
-import GridPostList from "@/components/shared/GridPostList";
 import PostStats from "@/components/shared/PostStats";
 import ShimmerPostCard from "@/components/shimmer-ui/ShimmerPostCard";
 import { useUserContext } from "@/context/AuthContext";

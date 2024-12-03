@@ -22,7 +22,7 @@ import Loader from "@/components/shared/Loader";
 
 const SigninForm = () => {
   const { toast } = useToast();
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+  const { checkAuthUser } = useUserContext();
   const navigate = useNavigate();
 
   const { mutateAsync: signInAccount, isPending } = useSignInAccount();
