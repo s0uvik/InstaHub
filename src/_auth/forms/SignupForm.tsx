@@ -78,12 +78,15 @@ const SignupForm = () => {
           <img src="/assets/images/logo.png" alt="logo" width={35} height={35} />{" "}
           <h3 className=" text-3xl font-semibold">InstaHub</h3>
         </div>
-        <h2 className="pt-5 text-xl sm:pt-12">Create a new account</h2>
+        <h2 className="pt-5 text-xl sm:pt-8">Create a new account</h2>
         <p className=" text-light-3 small-medium md:base-regular md:mt-2">
           To use InstaHub please enter your account details
         </p>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col gap-5 w-full mt-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className=" flex flex-col gap-5 w-full mt-4 p-4"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -91,9 +94,14 @@ const SignupForm = () => {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input type="text" className=" shad-input" {...field} />
+                  <Input
+                    type="text"
+                    placeholder="Enter your name"
+                    className=" shad-input"
+                    {...field}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className=" text-red" />
               </FormItem>
             )}
           />
@@ -104,9 +112,14 @@ const SignupForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="text" className=" shad-input" {...field} />
+                  <Input
+                    type="text"
+                    placeholder="Enter your email"
+                    className=" shad-input"
+                    {...field}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className=" text-red" />
               </FormItem>
             )}
           />
@@ -117,9 +130,14 @@ const SignupForm = () => {
               <FormItem>
                 <FormLabel>UserName</FormLabel>
                 <FormControl>
-                  <Input type="text" className=" shad-input" {...field} />
+                  <Input
+                    type="text"
+                    placeholder="Enter your username"
+                    className=" shad-input"
+                    {...field}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className=" text-red" />
               </FormItem>
             )}
           />
@@ -130,9 +148,14 @@ const SignupForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" className=" shad-input" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    className=" shad-input"
+                    {...field}
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className=" text-red" />
               </FormItem>
             )}
           />

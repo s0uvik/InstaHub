@@ -71,7 +71,10 @@ const SigninForm = () => {
           Welcome back! Please enter your details
         </p>
 
-        <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col gap-5 w-full mt-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className=" flex flex-col gap-5 w-full mt-4 p-6"
+        >
           <FormField
             control={form.control}
             name="email"
@@ -79,7 +82,12 @@ const SigninForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="text" className=" shad-input" {...field} />
+                  <Input
+                    type="text"
+                    placeholder="Enter your email"
+                    className=" shad-input"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage className=" text-red" />
               </FormItem>
@@ -92,7 +100,12 @@ const SigninForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input type="password" className=" shad-input" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    className=" shad-input"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage className=" text-red" />
               </FormItem>
