@@ -1,6 +1,6 @@
+import { Link, useLocation } from "react-router-dom";
 import { bottomBarLinks } from "@/constants";
 import { INavLink } from "@/types";
-import { Link, useLocation } from "react-router-dom";
 
 const BottomBar = () => {
   const { pathname } = useLocation();
@@ -20,9 +20,7 @@ const BottomBar = () => {
               alt={link.label}
               width={16}
               height={16}
-              className={` group-hover:invert-white ${
-                isActive && "invert-white"
-              }`}
+              className={` group-hover:invert-white ${isActive && "invert-white"}`}
             />
             <p className="tiny-medium text-light-2">{link.label}</p>
           </Link>

@@ -1,7 +1,7 @@
-import GridPostList from "@/components/shared/GridPostList";
+import { Loader } from "lucide-react";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserPosts } from "@/lib/react-query/queriesAndMutations";
-import { Loader } from "lucide-react";
+import GridPostList from "@/components/shared/GridPostList";
 
 const Profile = () => {
   const { user } = useUserContext();
@@ -14,19 +14,13 @@ const Profile = () => {
     <div className="profile-container">
       <header className="flex justify-between items-center">
         <div className="flex items-center space-x-4">
-          <img
-            src={user.imageUrl}
-            alt={user.name}
-            className="w-24 h-24 rounded-full"
-          />
+          <img src={user.imageUrl} alt={user.name} className="w-24 h-24 rounded-full" />
           <div>
             <h2 className="text-2xl font-semibold">{user.name}</h2>
             <p className="text-gray-500">@{user.username}</p>
           </div>
         </div>
-        <button className="bg-blue-500 text-white px-4 ml-10 py-2 rounded">
-          Follow
-        </button>
+        <button className="bg-blue-500 text-white px-4 ml-10 py-2 rounded">Follow</button>
       </header>
 
       <div className="flex justify-between mt-4">

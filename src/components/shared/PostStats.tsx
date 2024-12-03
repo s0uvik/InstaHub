@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Models } from "appwrite";
 import {
   useDeleteSavePost,
   useGetCurrentUser,
@@ -6,7 +7,6 @@ import {
   useSavePost,
 } from "@/lib/react-query/queriesAndMutations";
 import { checkIsLiked } from "@/lib/utils";
-import { Models } from "appwrite";
 
 type PostStatsProps = {
   post?: Models.Document;
@@ -67,11 +67,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
     <div className=" flex justify-between items-center 2-20">
       <div className="flex gap-2 mr-5">
         <img
-          src={
-            checkIsLiked(likes, userId)
-              ? "/assets/icons/liked.svg"
-              : "/assets/icons/like.svg"
-          }
+          src={checkIsLiked(likes, userId) ? "/assets/icons/liked.svg" : "/assets/icons/like.svg"}
           alt="like"
           width={20}
           height={20}

@@ -1,10 +1,10 @@
-import { Loader } from "@/components/shared";
-import PostStats from "@/components/shared/PostStats";
-import { Button } from "@/components/ui/button";
+import { useParams, Link } from "react-router-dom";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetPostById } from "@/lib/react-query/queriesAndMutations";
 import { formatDateString } from "@/lib/utils";
-import { useParams, Link } from "react-router-dom";
+import { Loader } from "@/components/shared";
+import PostStats from "@/components/shared/PostStats";
+import { Button } from "@/components/ui/button";
 
 const PostDetails = () => {
   const { id } = useParams();
@@ -22,10 +22,7 @@ const PostDetails = () => {
           <img src={post?.imageUrl} alt="post" className="post_details-img" />
           <div className=" post_details-info">
             <div className="flex-between w-full">
-              <Link
-                to={`/profile/${post?.creator.$id}`}
-                className=" flex items-center gap-3"
-              >
+              <Link to={`/profile/${post?.creator.$id}`} className=" flex items-center gap-3">
                 <img
                   src={post?.creator?.imageUrl || "/assets/images/profile.png"}
                   alt=""
@@ -44,21 +41,11 @@ const PostDetails = () => {
                 {user.id === post?.creator.$id && (
                   <>
                     <Link to={`/update-post/${post?.$id}`}>
-                      <img
-                        src="/assets/icons/edit.svg"
-                        alt="edit"
-                        width={24}
-                        height={24}
-                      />
+                      <img src="/assets/icons/edit.svg" alt="edit" width={24} height={24} />
                     </Link>
 
                     <Button onClick={handleDeletePost}>
-                      <img
-                        src="/assets/icons/delete.svg"
-                        alt="delete"
-                        width={24}
-                        height={24}
-                      />
+                      <img src="/assets/icons/delete.svg" alt="delete" width={24} height={24} />
                     </Button>
                   </>
                 )}

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+
+import useDebounce from "@/hooks/useDebounce";
+import { useGetPosts, useSearchPosts } from "@/lib/react-query/queriesAndMutations";
+
 import { Loader } from "@/components/shared";
 import GridPostList from "@/components/shared/GridPostList";
 import SearchResults from "@/components/shared/SearchResults";
 import { Input } from "@/components/ui/input";
-import useDebounce from "@/hooks/useDebounce";
-import { useGetPosts, useSearchPosts } from "@/lib/react-query/queriesAndMutations";
-import { useInView } from "react-intersection-observer";
 
 const Explore = () => {
   const { ref, inView } = useInView();
@@ -51,7 +53,7 @@ const Explore = () => {
         {shouldShowSearchResults ? (
           <SearchResults
             isSearchFetching={isFetchingSearchPost}
-            searchPosts={searchPosts?.documents} 
+            searchPosts={searchPosts?.documents}
           />
         ) : shouldShowPost ? (
           <p className=" text-light-4 mt-4 text-center w-full">End of posts</p>

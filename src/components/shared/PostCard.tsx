@@ -1,7 +1,7 @@
+import { Link } from "react-router-dom";
+import { Models } from "appwrite";
 import { useUserContext } from "@/context/AuthContext";
 import { formatDateString } from "@/lib/utils";
-import { Models } from "appwrite";
-import { Link } from "react-router-dom";
 import PostStats from "./PostStats";
 
 const PostCard = ({ post }: { post: Models.Document }) => {
@@ -24,9 +24,7 @@ const PostCard = ({ post }: { post: Models.Document }) => {
           <div className=" flex flex-col">
             <p className="">{post.creator.name}</p>
             <div>
-              <p className=" text-sm text-light-3">
-                {formatDateString(post.$createdAt)}
-              </p>
+              <p className=" text-sm text-light-3">{formatDateString(post.$createdAt)}</p>
             </div>
           </div>
         </div>

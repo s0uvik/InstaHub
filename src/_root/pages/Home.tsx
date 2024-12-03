@@ -1,6 +1,6 @@
-import { Loader, PostCard } from "@/components/shared";
-import { useGetRecentPosts } from "@/lib/react-query/queriesAndMutations";
 import { Models } from "appwrite";
+import { useGetRecentPosts } from "@/lib/react-query/queriesAndMutations";
+import { Loader, PostCard } from "@/components/shared";
 
 const Home = () => {
   const { data: posts, isPending, isError } = useGetRecentPosts();
@@ -21,11 +21,7 @@ const Home = () => {
               ))}
             </ul>
           )}
-          {isError && (
-            <p className=" text-red text-center font-bold">
-              Something went wrong
-            </p>
-          )}
+          {isError && <p className=" text-red text-center font-bold">Something went wrong</p>}
         </div>
       </div>
     </div>

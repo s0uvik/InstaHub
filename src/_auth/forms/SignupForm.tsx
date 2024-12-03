@@ -1,6 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { SignupValidation } from "@/lib/validation";
+import { useUserContext } from "@/context/AuthContext";
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 
 import {
   Form,
@@ -13,24 +18,14 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SignupValidation } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  useCreateUserAccount,
-  useSignInAccount,
-} from "@/lib/react-query/queriesAndMutations";
-import { useUserContext } from "@/context/AuthContext";
 
 const SignupForm = () => {
   const { toast } = useToast();
   const { checkAuthUser } = useUserContext();
   const navigate = useNavigate();
 
-  
-
-  const { mutateAsync: createUserAccount, isPending: isCreatingUser } =
-    useCreateUserAccount();
+  const { mutateAsync: createUserAccount, isPending: isCreatingUser } = useCreateUserAccount();
   const { mutateAsync: signInAccount } = useSignInAccount();
 
   // Define form.
@@ -79,26 +74,16 @@ const SignupForm = () => {
   return (
     <Form {...form}>
       <div className=" sm:w-420 flex-center flex-col border rounded-lg p-4 border-gray-900">
-      <div className=" flex gap-2 item-center">
-          <img
-            src="/assets/images/logo.png"
-            alt="logo"
-            width={35}
-            height={35}
-          />{" "}
+        <div className=" flex gap-2 item-center">
+          <img src="/assets/images/logo.png" alt="logo" width={35} height={35} />{" "}
           <h3 className=" text-3xl font-semibold">InstaHub</h3>
         </div>
-        <h2 className="pt-5 text-xl sm:pt-12">
-          Create a new account
-        </h2>
+        <h2 className="pt-5 text-xl sm:pt-12">Create a new account</h2>
         <p className=" text-light-3 small-medium md:base-regular md:mt-2">
           To use InstaHub please enter your account details
         </p>
 
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className=" flex flex-col gap-5 w-full mt-4"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col gap-5 w-full mt-4">
           <FormField
             control={form.control}
             name="name"

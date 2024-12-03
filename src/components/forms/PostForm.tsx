@@ -1,5 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { Models } from "appwrite";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -15,14 +17,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import FileUploader from "../shared/FileUploader";
 import { PostValidation } from "@/lib/validation";
-import { Models } from "appwrite";
 import { useUserContext } from "@/context/AuthContext";
 import { useToast } from "../ui/use-toast";
-import { useNavigate } from "react-router-dom";
-import {
-  useCreatePost,
-  useUpdatePost,
-} from "@/lib/react-query/queriesAndMutations";
+import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutations";
 
 type PostFormProps = {
   post?: Models.Document;
@@ -30,10 +27,8 @@ type PostFormProps = {
 };
 
 const PostForm = ({ post, action }: PostFormProps) => {
-  const { mutateAsync: createPost, isPending: isPendingCreatePost } =
-    useCreatePost();
-  const { mutateAsync: updatePost, isPending: isPendingUpdatePost } =
-    useUpdatePost();
+  const { mutateAsync: createPost, isPending: isPendingCreatePost } = useCreatePost();
+  const { mutateAsync: updatePost, isPending: isPendingUpdatePost } = useUpdatePost();
 
   const { user } = useUserContext();
   const { toast } = useToast();
@@ -102,10 +97,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
             <FormItem>
               <FormLabel className=" shad-form_label">Caption</FormLabel>
               <FormControl>
-                <Textarea
-                  className=" shad-textarea custom-scrolbar"
-                  {...field}
-                />
+                <Textarea className=" shad-textarea custom-scrolbar" {...field} />
               </FormControl>
               <FormMessage className=" shad-form_message" />
             </FormItem>
@@ -118,10 +110,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
             <FormItem>
               <FormLabel className=" shad-form_label">Add Photos</FormLabel>
               <FormControl>
-                <FileUploader
-                  fieldChange={field.onChange}
-                  mediaUrl={post?.imageUrl}
-                />
+                <FileUploader fieldChange={field.onChange} mediaUrl={post?.imageUrl} />
               </FormControl>
               <FormMessage className=" shad-form_message" />
             </FormItem>
@@ -145,16 +134,9 @@ const PostForm = ({ post, action }: PostFormProps) => {
           name="tags"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className=" shad-form_label">
-                Add Tags (separated bu comma ", ")
-              </FormLabel>
+              <FormLabel className=" shad-form_label">Add Tags (separated bu comma ", ")</FormLabel>
               <FormControl>
-                <Input
-                  type="text"
-                  placeholder="Art, Learn"
-                  className="shad-input"
-                  {...field}
-                />
+                <Input type="text" placeholder="Art, Learn" className="shad-input" {...field} />
               </FormControl>
               <FormMessage className=" shad-form_message" />
             </FormItem>

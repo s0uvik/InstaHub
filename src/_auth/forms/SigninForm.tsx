@@ -1,6 +1,11 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { SigninValidation } from "@/lib/validation";
+import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
+import { useUserContext } from "@/context/AuthContext";
 
 import {
   Form,
@@ -13,11 +18,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SigninValidation } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
-import { Link, useNavigate } from "react-router-dom";
-import { useSignInAccount } from "@/lib/react-query/queriesAndMutations";
-import { useUserContext } from "@/context/AuthContext";
 
 const SigninForm = () => {
   const { toast } = useToast();
@@ -62,25 +63,15 @@ const SigninForm = () => {
     <Form {...form}>
       <div className=" sm:w-420 flex-center flex-col border rounded-lg p-4 border-gray-900">
         <div className=" flex gap-2 item-center">
-          <img
-            src="/assets/images/logo.png"
-            alt="logo"
-            width={35}
-            height={35}
-          />{" "}
+          <img src="/assets/images/logo.png" alt="logo" width={35} height={35} />{" "}
           <h3 className=" text-2xl font-semibold">InstaHub</h3>
         </div>
-        <h2 className="pt-5 text-xl sm:pt-12">
-          Login to your account
-        </h2>
+        <h2 className="pt-5 text-xl sm:pt-12">Login to your account</h2>
         <p className=" text-light-3 small-medium md:base-regular md:mt-2">
           Welcome back! Please enter your details
         </p>
 
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className=" flex flex-col gap-5 w-full mt-4"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col gap-5 w-full mt-4">
           <FormField
             control={form.control}
             name="email"

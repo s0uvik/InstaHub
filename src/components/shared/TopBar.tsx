@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "../ui/button";
 import { useSignOutAccount } from "../../lib/react-query/queriesAndMutations";
 import { useUserContext } from "../../context/AuthContext";
+import { Button } from "../ui/button";
 
 const TopBar = () => {
   const { mutate: signOut, isSuccess } = useSignOutAccount();
@@ -13,7 +13,7 @@ const TopBar = () => {
   useEffect(() => {
     if (isSuccess) {
       navigate("/sign-in");
-      location.reload()
+      location.reload();
     }
   }, [isSuccess]);
 
@@ -21,12 +21,7 @@ const TopBar = () => {
     <section className="topbar">
       <div className="flex justify-between items-center w-full py-4 px-5">
         <Link to="/" className="flex gap-2 items-center">
-          <img
-            src="/assets/images/logo.png"
-            alt="logo"
-            width={35}
-            height={35}
-          />{" "}
+          <img src="/assets/images/logo.png" alt="logo" width={35} height={35} />{" "}
           <h3 className=" text-2xl font-semibold">InstaHub</h3>
         </Link>
 
