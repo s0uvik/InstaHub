@@ -1,6 +1,6 @@
-import { useGetUsers } from "@/lib/react-query/queriesAndMutations";
 import { Models } from "appwrite";
 import { useState } from "react";
+import { useGetUsers } from "@/lib/react-query/queriesAndMutations";
 import useDebounce from "@/hooks/useDebounce";
 import SearchBar from "@/components/shared/SearchBar";
 import UserCard from "@/components/shared/UserCard";

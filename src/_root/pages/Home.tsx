@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <div className="flex flex-1 gap-4">
       <div className="home-container">
-        <div className="md:w-[80%]">
+        <div className="md:w-[80%] w-[100%]">
           <h2 className="h3-bold md:h2-bold text-left w-full mb-6">Home Feed</h2>
           {isPending ? (
             <Loader />

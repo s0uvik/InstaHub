@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import { Models } from "appwrite";
 import { useUserContext } from "@/context/AuthContext";
 import { client, appwriteConfig } from "@/lib/appwrite/config";
-import { Models } from "appwrite";
 import { useGetUsers } from "@/lib/react-query/queriesAndMutations";
 import { useGetMessages, useSendMessage } from "@/lib/react-query/queriesAndMutations/message";
 import UsersList from "@/components/shared/message/UsersList";
