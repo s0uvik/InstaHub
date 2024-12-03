@@ -76,7 +76,7 @@ const SignupForm = () => {
       <div className=" sm:w-420 flex-center flex-col border rounded-lg p-4 border-gray-900">
         <div className=" flex gap-2 item-center">
           <img src="/assets/images/logo.png" alt="logo" width={35} height={35} />{" "}
-          <h3 className=" text-3xl font-semibold">InstaHub</h3>
+          <h3 className=" text-2xl font-semibold">InstaHub</h3>
         </div>
         <h2 className="pt-5 text-xl sm:pt-8">Create a new account</h2>
         <p className=" text-light-3 small-medium md:base-regular md:mt-2">
