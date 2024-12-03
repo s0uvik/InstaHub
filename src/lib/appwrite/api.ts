@@ -239,6 +239,22 @@ export async function savePost(postId: string, userId: string) {
   }
 }
 
+export async function getSavePost(userId: string) {
+  try {
+    const savePosts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      [Query.equal("user", userId), Query.orderDesc("$createdAt"), Query.limit(20)]
+    );
+
+    if (!savePosts) throw Error;
+
+    return savePosts;
+  } catch (error) {
+    console.error("Appwrite error :: getSavePost :: ", error);
+  }
+}
+
 export async function deleteSavePost(savePostId: string) {
   try {
     const deletePost = await databases.deleteDocument(

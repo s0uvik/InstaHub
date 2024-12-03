@@ -9,6 +9,7 @@ import {
   getInfinitePosts,
   getPostById,
   getRecentPosts,
+  getSavePost,
   getUserById,
   getUserPosts,
   likePost,
@@ -107,6 +108,13 @@ export const useSavePost = () => {
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
       });
     },
+  });
+};
+
+export const useGetSavePost = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_SAVE_POSTS],
+    queryFn: () => getSavePost(userId),
   });
 };
 
