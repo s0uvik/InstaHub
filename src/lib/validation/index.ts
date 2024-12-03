@@ -1,19 +1,20 @@
 import { z } from "zod";
 
 export const SignupValidation = z.object({
-  name: z.string().min(2, { message: "Too short" }),
-  username: z.string().min(2, { message: "Too short" }),
-  email: z.string().email({ message: "Invalid email" }),
-  password: z
+  name: z.string().min(2, { message: "Name is too short" }),
+  username: z
     .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
+    .min(2, { message: "Username is too short" })
+    .refine((value) => value.toLowerCase() !== "guest", {
+      message: 'The username "guest" is not allowed.',
+    }),
+  email: z.string().email({ message: "Invalid email" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
 });
 
 export const SigninValidation = z.object({
   email: z.string().email({ message: "Invalid email" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
 });
 
 export const PostValidation = z.object({
