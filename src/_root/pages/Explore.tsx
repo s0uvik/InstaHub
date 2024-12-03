@@ -7,7 +7,6 @@ import { useGetPosts, useSearchPosts } from "@/lib/react-query/queriesAndMutatio
 import { Loader } from "@/components/shared";
 import GridPostList from "@/components/shared/GridPostList";
 import SearchResults from "@/components/shared/SearchResults";
-import { Input } from "@/components/ui/input";
 import SearchBar from "@/components/shared/SearchBar";
 
 const Explore = () => {
