@@ -5,12 +5,7 @@ import { account, appwriteConfig, avatars, databases, storage } from "./config";
 
 export async function createUserAccount(user: INewUser) {
   try {
-    const newAccount = await account.create(
-      ID.unique(),
-      user.email,
-      user.password,
-      user.name
-    );
+    const newAccount = await account.create(ID.unique(), user.email, user.password, user.name);
 
     if (!newAccount) throw Error;
 
@@ -138,11 +133,7 @@ export async function createPost(post: INewPost) {
 
 export async function uploadFile(file: File) {
   try {
-    const uploadedFile = await storage.createFile(
-      appwriteConfig.storageId,
-      ID.unique(),
-      file
-    );
+    const uploadedFile = await storage.createFile(appwriteConfig.storageId, ID.unique(), file);
 
     return uploadedFile;
   } catch (error) {
@@ -200,7 +191,7 @@ export async function getUserPosts(userId: string) {
     const posts = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.postsCollectionId,
-      [Query.equal("creator", userId),Query.orderDesc("$createdAt"), Query.limit(20)]
+      [Query.equal("creator", userId), Query.orderDesc("$createdAt"), Query.limit(20)]
     );
 
     if (!posts) throw new Error("No posts found");
@@ -389,7 +380,6 @@ export async function getInfinitePosts({ pageParam }: { pageParam: string | unde
   }
 }
 
-
 export async function searchPosts(searchTerm: string) {
   try {
     const posts = await databases.listDocuments(
@@ -406,5 +396,33 @@ export async function searchPosts(searchTerm: string) {
   }
 }
 
+export async function getAlUsers() {
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      [Query.orderDesc("$createdAt"), Query.limit(20)]
+    );
 
+    if (!posts) throw new Error("No user found");
 
+    return posts;
+  } catch (error) {
+    console.error("Appwrite error :: getAlUsers :: ", error);
+  }
+}
+export async function getUserById(userId: string) {
+  try {
+    const post = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      userId
+    );
+
+    if (!post) throw Error("User not found");
+
+    return post;
+  } catch (error) {
+    console.error("Appwrite error :: getUserById :: ", error);
+  }
+}
