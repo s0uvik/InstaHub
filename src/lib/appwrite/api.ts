@@ -2,6 +2,7 @@ import { ID, Query } from "appwrite";
 
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
+import { EditProfileType } from "@/components/forms/EditProfile";
 
 export async function createUserAccount(user: INewUser) {
   try {
@@ -454,5 +455,23 @@ export async function getUserById(userId: string) {
     return post;
   } catch (error) {
     console.error("Appwrite error :: getUserById :: ", error);
+  }
+}
+
+export async function updateUser(userId: string, user: EditProfileType) {
+  try {
+    const updatedUser = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      userId,
+      user
+    );
+
+    if (!updatedUser) throw Error;
+
+    return updatedUser;
+  } catch (error) {
+    console.error("Appwrite error :: updateUser :: ", error);
+    return null;
   }
 }

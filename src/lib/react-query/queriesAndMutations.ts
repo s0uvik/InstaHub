@@ -19,10 +19,12 @@ import {
   signInAccount,
   signOutAccount,
   updatePost,
+  updateUser,
 } from "../appwrite/api";
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 import { Models } from "appwrite";
+import { EditProfileType } from "@/components/forms/EditProfile";
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -219,6 +221,24 @@ export const useGetUserById = (userId: string) => {
     queryKey: [QUERY_KEYS.GET_USER_BY_ID],
     queryFn: () => getUserById(userId),
     enabled: !!userId,
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ userId, user }: { userId: string; user: EditProfileType }) =>
+      updateUser(userId, user),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      return data;
+    },
   });
 };
 

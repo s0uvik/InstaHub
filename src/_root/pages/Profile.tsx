@@ -5,6 +5,7 @@ import GridPostList from "@/components/shared/GridPostList";
 import { Loader } from "@/components/shared";
 import ShimmerProfile from "@/components/shimmer-ui/Profile";
 import RedirectToLogin from "@/components/shared/RedirectToLogin";
+import EditProfile from "@/components/forms/EditProfile";
 
 const Profile = () => {
   const { id: userId } = useParams();
@@ -28,15 +29,16 @@ const Profile = () => {
         {isUserLoading ? (
           <ShimmerProfile />
         ) : (
-          <div className="flex items-center space-x-4">
+          <div className="flex space-x-4">
             <img src={user?.imageUrl} alt={user?.name} className="w-24 h-24 rounded-full" />
             <div>
               <h2 className="text-2xl font-semibold">{user?.name}</h2>
               <p className="text-gray-500">@{user?.username}</p>
+              {user?.bio && <p className="mt-2">{user.bio}</p>}
             </div>
 
             {userId === loggedInUser.id ? (
-              ""
+              <EditProfile user={user} />
             ) : (
               <button className="shad-button_primary text-white px-4 ml-10 py-2 rounded">
                 Follow
