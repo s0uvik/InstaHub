@@ -29,18 +29,18 @@ const Saved = () => {
       ) : (
         <ul className="grid-container">
           {posts?.documents.map((item) => (
-            <li key={item.post.$id} className=" relative">
-              <Link to={`/post/${item.post.$id}`} className=" grid-post_link">
-                <img src={item.post.imageUrl} alt="post" className=" h-full w-full object-cover" />
+            <li key={item.post?.$id} className=" relative">
+              <Link to={`/post/${item.post?.$id}`} className=" grid-post_link">
+                <img src={item.post?.imageUrl} alt="post" className=" h-full w-full object-cover" />
               </Link>
               <div className="grid-post_user">
                 <div className=" flex items-center justify-start gap-2">
                   <img
-                    src={item.post.creator.imageUrl}
+                    src={item.post?.creator.imageUrl}
                     alt="creator"
                     className=" w-8 h-8 rounded-full"
                   />
-                  <p className="line-clamp-1">{item.post.creator.name}</p>
+                  <p className="line-clamp-1">{item.post?.creator.name}</p>
                 </div>
                 <PostStats post={item.post} userId={user.id} />
               </div>

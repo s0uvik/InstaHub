@@ -14,7 +14,6 @@ import {
   PostDetails,
   Profile,
   Saved,
-  UpdateProfile,
   Message,
 } from "./_root/pages";
 
@@ -39,7 +38,6 @@ const App = () => {
           <Route path="/update-post/:id" element={<EditPost />} />
           <Route path="/post/:id" element={<PostDetails />} />
           <Route path="/profile/:id/*" element={<Profile />} />
-          <Route path="/update-profile/:id" element={<UpdateProfile />} />
         </Route>
       </Routes>
       <Toaster />

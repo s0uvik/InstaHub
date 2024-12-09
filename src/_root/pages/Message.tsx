@@ -100,7 +100,7 @@ const Message = () => {
       </div>
 
       {/* Chat Section */}
-      <div className="flex flex-grow flex-col bg-dark-2 h-full w-full md:w-3/4">
+      <div className="flex flex-grow flex-col bg-dark-2 h-full w-full px-4">
         <ChatWindow
           selectedUser={selectedUser}
           messages={messages}

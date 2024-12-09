@@ -30,9 +30,13 @@ const Profile = () => {
           <ShimmerProfile />
         ) : (
           <div className="flex space-x-4">
-            <img src={user?.imageUrl} alt={user?.name} className="w-24 h-24 rounded-full" />
+            <img
+              src={user?.imageUrl}
+              alt={user?.name}
+              className="md:w-24 w-16 h-16 md:h-24 rounded-full"
+            />
             <div>
-              <h2 className="text-2xl font-semibold">{user?.name}</h2>
+              <h2 className="text-lg md:text-2xl font-semibold">{user?.name}</h2>
               <p className="text-gray-500">@{user?.username}</p>
               {user?.bio && <p className="mt-2">{user.bio}</p>}
             </div>

@@ -8,9 +8,15 @@ type UsersListProps = {
   currentUserId: string;
 };
 
-const UsersList = ({ users, isPending, selectedUser, onSelectUser, currentUserId }: UsersListProps) => {
+const UsersList = ({
+  users,
+  isPending,
+  selectedUser,
+  onSelectUser,
+  currentUserId,
+}: UsersListProps) => {
   return (
-    <div className="border-r border-dark-4 overflow-y-auto bg-dark-2 w-1/4 min-w-[250px]">
+    <div className="border-r h-full border-dark-4 overflow-y-auto bg-dark-2 w-1/4 min-w-[250px]">
       <div className="p-4">
         <h2 className="h3-bold md:h2-bold mb-4 text-light-1">Messages</h2>
         {/* Search bar */}
