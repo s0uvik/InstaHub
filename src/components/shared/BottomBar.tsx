@@ -5,7 +5,7 @@ import { INavLink } from "@/types";
 const BottomBar = () => {
   const { pathname } = useLocation();
   return (
-    <section className="bottom-bar">
+    <section className="bottom-bar" data-testid="bottom-bar">
       {bottomBarLinks.map((link: INavLink) => {
         const isActive = pathname === link.route;
 
