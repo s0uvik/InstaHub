@@ -22,4 +22,9 @@ export enum QUERY_KEYS {
   // MESSAGE KEYS
   GET_MESSAGES = "getMessages",
   GET_CONVERSATIONS = "getConversations",
+
+    // FOLLOW KEYS
+    GET_PENDING_FOLLOW_REQUESTS = "getPendingFollowRequests",
+    GET_USER_FOLLOWERS = "getUserFollowers",
+    GET_USER_FOLLOWING = "getUserFollowing",
 }

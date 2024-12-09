@@ -6,6 +6,9 @@ import { Loader } from "@/components/shared";
 import ShimmerProfile from "@/components/shimmer-ui/Profile";
 import RedirectToLogin from "@/components/shared/RedirectToLogin";
 import EditProfile from "@/components/forms/EditProfile";
+import FollowButton from "@/components/shared/FollowButton";
+import FollowRequests from "@/components/shared/FollowRequests";
+import { useGetUserFollowers, useGetUserFollowing } from "@/lib/react-query/queriesAndMutations/follow";
 
 const Profile = () => {
   const { id: userId } = useParams();
@@ -17,6 +20,9 @@ const Profile = () => {
     isError: isUserError,
   } = useGetUserById(userId as string);
   const { data: posts, isPending, isError } = useGetUserPosts(userId as string);
+  const { data: followers } = useGetUserFollowers(userId as string);
+  const { data: following } = useGetUserFollowing(userId as string);
+
 
   if (loggedInUser.username === "guest" && userId === loggedInUser.id) {
     return <RedirectToLogin message="Please login to view your profile" />;
@@ -29,61 +35,55 @@ const Profile = () => {
         {isUserLoading ? (
           <ShimmerProfile />
         ) : (
-          <div className="flex space-x-4">
-            <img
-              src={user?.imageUrl}
-              alt={user?.name}
-              className="md:w-24 w-16 h-16 md:h-24 rounded-full"
-            />
-            <div>
-              <h2 className="text-lg md:text-2xl font-semibold">{user?.name}</h2>
-              <p className="text-gray-500">@{user?.username}</p>
-              {user?.bio && <p className="mt-2">{user.bio}</p>}
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4 items-center">
+              <img
+                src={user?.imageUrl || "/assets/icons/profile-placeholder.svg"}
+                alt="profile"
+                className="w-28 h-28 rounded-full object-cover"
+              />
+              <div className="flex flex-col items-center">
+                <h1 className="h3-bold">{user?.name}</h1>
+                <p className="small-regular text-light-3">@{user?.username}</p>
+              </div>
+              <div className="flex gap-8 items-center">
+                <div className="flex flex-col items-center">
+                  <p className="h3-bold">{followers?.length || 0}</p>
+                  <p className="small-regular text-light-3">Followers</p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <p className="h3-bold">{following?.length || 0}</p>
+                  <p className="small-regular text-light-3">Following</p>
+                </div>
+                <div className="flex flex-col items-center">
+                  <p className="h3-bold">{posts?.documents.length || 0}</p>
+                  <p className="small-regular text-light-3">Posts</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                {loggedInUser.id === userId ? (
+                  <EditProfile user={user} />
+                ) : (
+                  <FollowButton userId={userId as string} />
+                )}
+              </div>
             </div>
 
-            {userId === loggedInUser.id ? (
-              <EditProfile user={user} />
-            ) : (
-              <button className="shad-button_primary text-white px-4 ml-10 py-2 rounded">
-                Follow
-              </button>
-            )}
+            {loggedInUser.id === userId && <FollowRequests />}
+
+            <div className="flex flex-col gap-4">
+              <h2 className="h3-bold">Posts</h2>
+              {isPending && !posts ? (
+                <Loader />
+              ) : isError ? (
+                <p className="text-red-500 text-center mt-8">Failed to load posts</p>
+              ) : (
+                <GridPostList posts={posts?.documents || []} />
+              )}
+            </div>
           </div>
         )}
-
-        <div className="flex justify-between mt-8 ">
-          <div className="text-center">
-            <p className="font-semibold">{posts?.documents.length}</p>
-            <p className="text-gray-500">Posts</p>
-          </div>
-          <div className="text-center ml-4">
-            <p className="font-semibold">250</p>
-            <p className="text-gray-500">Followers</p>
-          </div>
-          <div className="text-center ml-4">
-            <p className="font-semibold">180</p>
-            <p className="text-gray-500">Following</p>
-          </div>
-        </div>
       </section>
-
-      {/* post section */}
-      <div className="mt-4">
-        <h3 className="text-lg font-semibold mb-1 text-center">
-          {userId === loggedInUser.id ? "My posts" : "Posts"}
-        </h3>
-        {isError && <p className="text-red-500 text-center mt-8">Something went wrong</p>}
-        {isPending ? (
-          <div className=" mt-8">
-            <Loader />
-          </div>
-        ) : (
-          <>
-            <hr className="mb-4 border-gray-800 border w-full" />
-            <GridPostList posts={posts?.documents} />
-          </>
-        )}
-      </div>
     </div>
   );
 };
