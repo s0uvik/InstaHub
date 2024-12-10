@@ -1,14 +1,21 @@
 import PostStats from "@/components/shared/PostStats";
 import RedirectToLogin from "@/components/shared/RedirectToLogin";
 import ShimmerPostCard from "@/components/shimmer-ui/ShimmerPostCard";
+import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetSavePost } from "@/lib/react-query/queriesAndMutations";
+import { useDeleteSavePost, useGetSavePost } from "@/lib/react-query/queriesAndMutations";
+import { Loader, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Saved = () => {
   const { user } = useUserContext();
 
   const { data: posts, isPending, isError } = useGetSavePost(user.id);
+  const { mutateAsync: deletePost, isPending: isPendingDelete } = useDeleteSavePost();
+
+  const deleteSavePost = async (id: string) => {
+    window.confirm("Are you sure you want to delete this post?") && (await deletePost(id));
+  };
 
   if (user.username === "guest") {
     return <RedirectToLogin message="Please login to view saved Posts" />;
@@ -30,6 +37,13 @@ const Saved = () => {
         <ul className="grid-container">
           {posts?.documents.map((item) => (
             <li key={item.post?.$id} className=" relative">
+              <Button
+                onClick={() => deleteSavePost(item.$id)}
+                disabled={isPendingDelete}
+                className=" absolute top-2 right-2 cursor-pointer"
+              >
+                {isPendingDelete ? <Loader /> : <Trash2 className=" w-5 h-5 text-red" />}
+              </Button>
               <Link to={`/post/${item.post?.$id}`} className=" grid-post_link">
                 <img src={item.post?.imageUrl} alt="post" className=" h-full w-full object-cover" />
               </Link>
@@ -47,6 +61,12 @@ const Saved = () => {
             </li>
           ))}
         </ul>
+      )}
+      {posts?.documents.length === 0 && (
+        <div className=" flex flex-col items-center gap-4">
+          <p className="text-center text-light-3">No saved posts yet</p>
+          <img src="/assets/icons/empty-save-post.svg" alt="No posts" className="w-[50%]" />
+        </div>
       )}
     </div>
   );

@@ -19,13 +19,12 @@ const AllUsers = () => {
   const { data, isPending, isError } = useGetUsers();
   const [searchValue, setSearchValue] = useState("");
   const debouncedValue = useDebounce(searchValue, 500);
-
   const filteredUsers = (data?.documents as User[])?.filter(
     (user) =>
       user.name.toLowerCase().includes(debouncedValue.toLowerCase()) ||
       user.username.toLowerCase().includes(debouncedValue.toLowerCase())
   );
-
+console.log(filteredUsers)
   return (
     <div className="common-container">
       <div className="user-container">

@@ -30,7 +30,7 @@ const RightBar = () => {
                 <p className="base-medium text-light-1">{user.name}</p>
                 <p className="small-regular text-light-3">@{user.username}</p>
               </div>
-              <button className="text-primary-500 base-medium">Follow</button>
+              <button className="text-primary-500 base-medium">View Profile</button>
             </Link>
           ))}
         </div>

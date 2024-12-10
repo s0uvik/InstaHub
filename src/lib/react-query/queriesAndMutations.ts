@@ -1,4 +1,10 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   createAnonymousSession,
   createPost,
@@ -71,7 +77,7 @@ export const useGetRecentPosts = () => {
 
 export const useGetUserPosts = (userId: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_USER_POSTS],
+    queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
     queryFn: () => getUserPosts(userId),
   });
 };
@@ -136,7 +142,7 @@ export const useDeleteSavePost = () => {
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POSTS],
+        queryKey: [QUERY_KEYS.GET_SAVE_POSTS],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -218,9 +224,19 @@ export const useGetUsers = () => {
 
 export const useGetUserById = (userId: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_USER_BY_ID],
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
     queryFn: () => getUserById(userId),
     enabled: !!userId,
+  });
+};
+
+export const useGetUsersByIds = (userIds: string[]) => {
+  return useQueries({
+    queries: userIds.map((id) => ({
+      queryKey: ["user", id],
+      queryFn: () => getUserById(id),
+      enabled: !!id,
+    })),
   });
 };
 
