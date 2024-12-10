@@ -5,15 +5,13 @@ import {
   useSendFollowRequest,
   useUnfollowUser,
   useGetUserFollowers,
-  useGetUserFollowing,
+  useGetFollowRequestStatus,
 } from "@/lib/react-query/queriesAndMutations/follow";
 import { useToast } from "../ui/use-toast";
-import { Query } from "appwrite";
-import { appwriteConfig, databases } from "@/lib/appwrite/config";
 
-type FollowButtonProps = {
+interface FollowButtonProps {
   userId: string;
-};
+}
 
 const FollowButton = ({ userId }: FollowButtonProps) => {
   const { user } = useUserContext();
@@ -22,91 +20,76 @@ const FollowButton = ({ userId }: FollowButtonProps) => {
   const { toast } = useToast();
 
   const { data: followers } = useGetUserFollowers(userId);
-  const { mutate: sendFollowRequest, isPending: isSendingRequest } =
-    useSendFollowRequest();
+  const { mutate: sendFollowRequest, isPending: isSendingRequest } = useSendFollowRequest();
   const { mutate: unfollowUser, isPending: isUnfollowing } = useUnfollowUser();
+  const { data: followRequestStatus } = useGetFollowRequestStatus(user.id, userId);
 
-  // Check for existing follow request
   useEffect(() => {
-    const checkExistingRequest = async () => {
-      try {
-        const existingRequest = await databases.listDocuments(
-          appwriteConfig.databaseId,
-          appwriteConfig.followRequestsCollectionId,
-          [
-            Query.equal("follower_id", user.id),
-            Query.equal("following_id", userId),
-            Query.equal("status", "pending"),
-          ]
-        );
-
-        setHasPendingRequest(existingRequest.documents.length > 0);
-      } catch (error) {
-        console.error("Error checking follow request:", error);
-      }
-    };
-
-    if (user.id && userId) {
-      checkExistingRequest();
+    if (followRequestStatus === "pending") {
+      setHasPendingRequest(true);
+      setIsFollowing(false);
+    } else if (followRequestStatus === "accepted") {
+      setHasPendingRequest(false);
+      setIsFollowing(true);
+    } else {
+      setHasPendingRequest(false);
+      setIsFollowing(false);
     }
-  }, [user.id, userId]);
+  }, [followRequestStatus]);
 
-  // Update `isFollowing` state based on `followers` data
   useEffect(() => {
     if (followers) {
       setIsFollowing(followers.includes(user.id));
       if (followers.includes(user.id)) {
-        setHasPendingRequest(false); // Reset pending request if already following
+        setHasPendingRequest(false);
       }
     }
   }, [followers, user.id]);
 
   const handleFollowAction = async () => {
     if (isFollowing) {
-      try {
-        unfollowUser(
-          { followerId: user.id, followingId: userId },
-          {
-            onSuccess: () => {
-              setIsFollowing(false);
-              setHasPendingRequest(false);
-            },
-            onError: () => {
-              toast({
-                title: "Error",
-                description: "Failed to unfollow user. Please try again.",
-                variant: "destructive",
-              });
-            },
-          }
-        );
-      } catch (error) {
-        console.error("Error unfollowing user:", error);
-      }
+      unfollowUser(
+        { followerId: user.id, followingId: userId },
+        {
+          onSuccess: () => {
+            setIsFollowing(false);
+            setHasPendingRequest(false);
+          },
+          onError: () => {
+            toast({
+              title: "Error",
+              description: "Failed to unfollow user. Please try again.",
+              variant: "destructive",
+            });
+          },
+        }
+      );
     } else {
-      try {
-        sendFollowRequest(
-          { followerId: user.id, followingId: userId },
-          {
-            onSuccess: () => {
+      sendFollowRequest(
+        { followerId: user.id, followingId: userId },
+        {
+          onSuccess: (data) => {
+            if (data.status === "cancelled") {
+              toast({
+                title: "Request Cancelled",
+                description: "Your follow request was cancelled.",
+              });
+              setHasPendingRequest(false);
+              setIsFollowing(false);
+            } else {
               setHasPendingRequest(true);
-              toast({
-                title: "Success",
-                description: "Follow request sent successfully!",
-              });
-            },
-            onError: () => {
-              toast({
-                title: "Error",
-                description: "Failed to send follow request. Please try again.",
-                variant: "destructive",
-              });
-            },
-          }
-        );
-      } catch (error) {
-        console.error("Error sending follow request:", error);
-      }
+              setIsFollowing(false);
+            }
+          },
+          onError: () => {
+            toast({
+              title: "Error",
+              description: "Failed to send follow request. Please try again.",
+              variant: "destructive",
+            });
+          },
+        }
+      );
     }
   };
 
@@ -116,15 +99,9 @@ const FollowButton = ({ userId }: FollowButtonProps) => {
     <Button
       onClick={handleFollowAction}
       disabled={isSendingRequest || isUnfollowing}
-      className={`shad-button_primary ${
-        isFollowing
-          ? "bg-dark-4 hover:bg-red-500 hover:text-white"
-          : hasPendingRequest
-          ? "bg-dark-4"
-          : "bg-primary-500"
-      }`}
+      className="shad-button_primary"
     >
-      {isFollowing ? "Unfollow" : hasPendingRequest ? "Request Sent" : "Follow"}
+      {isFollowing ? "Unfollow" : hasPendingRequest ? "Cancel Request" : "Follow"}
     </Button>
   );
 };

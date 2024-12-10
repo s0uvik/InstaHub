@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createAnonymousSession,
   createPost,
@@ -71,7 +71,7 @@ export const useGetRecentPosts = () => {
 
 export const useGetUserPosts = (userId: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_USER_POSTS],
+    queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
     queryFn: () => getUserPosts(userId),
   });
 };
@@ -218,9 +218,19 @@ export const useGetUsers = () => {
 
 export const useGetUserById = (userId: string) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_USER_BY_ID],
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
     queryFn: () => getUserById(userId),
     enabled: !!userId,
+  });
+};
+
+export const useGetUsersByIds = (userIds: string[]) => {
+  return useQueries({
+    queries: userIds.map((id) => ({
+      queryKey: ["user", id],
+      queryFn: () => getUserById(id), 
+      enabled: !!id,
+    })),
   });
 };
 

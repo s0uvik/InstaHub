@@ -11,14 +11,19 @@ export async function sendFollowRequest(followerId: string, followingId: string)
       [
         Query.equal("follower_id", followerId),
         Query.equal("following_id", followingId),
-        Query.equal("status", ["pending", "accepted"]),
       ]
     );
 
     if (existingRequest.documents.length > 0) {
       const request = existingRequest.documents[0];
       if (request.status === "pending") {
-        throw new Error("Follow request already pending");
+        // Cancel the request
+        await databases.deleteDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.followRequestsCollectionId,
+          request.$id
+        );
+        return { status: "cancelled" };
       } else if (request.status === "accepted") {
         throw new Error("Already following this user");
       }
@@ -43,50 +48,22 @@ export async function sendFollowRequest(followerId: string, followingId: string)
   }
 }
 
-// Check if a follow request exists
-export async function checkFollowRequestStatus(followerId: string, followingId: string) {
-  try {
-    const existingRequest = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.followRequestsCollectionId,
-      [
-        Query.equal("follower_id", followerId),
-        Query.equal("following_id", followingId),
-      ]
-    );
-
-    if (existingRequest.documents.length > 0) {
-      return existingRequest.documents[0];
-    }
-    return null;
-  } catch (error) {
-    console.error("Appwrite error :: checkFollowRequestStatus :: ", error);
-    throw error;
-  }
-}
-
-// Get pending follow requests for a user
-export async function getPendingFollowRequests(userId: string) {
-  try {
-    const requests = await databases.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.followRequestsCollectionId,
-      [Query.equal("following_id", userId), Query.equal("status", "pending")]
-    );
-
-    return requests;
-  } catch (error) {
-    console.error("Appwrite error :: getPendingFollowRequests :: ", error);
-    throw error;
-  }
-}
-
 // Update follow request status (accept/reject)
 export async function updateFollowRequestStatus(
   requestId: string,
   status: "accepted" | "rejected"
 ) {
   try {
+    const request = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.followRequestsCollectionId,
+      requestId
+    );
+
+    if (request.status === status) {
+      return request;
+    }
+
     const updatedRequest = await databases.updateDocument(
       appwriteConfig.databaseId,
       appwriteConfig.followRequestsCollectionId,
@@ -95,14 +72,6 @@ export async function updateFollowRequestStatus(
         status: status,
       }
     );
-
-    if (status === "accepted") {
-      const request = await databases.getDocument(
-        appwriteConfig.databaseId,
-        appwriteConfig.followRequestsCollectionId,
-        requestId
-      );
-    }
 
     return updatedRequest;
   } catch (error) {
@@ -114,14 +83,17 @@ export async function updateFollowRequestStatus(
 // Get user's followers
 export async function getUserFollowers(userId: string) {
   try {
-    const user = await databases.getDocument(
+    // Get all accepted follow requests where this user is being followed
+    const requests = await databases.listDocuments(
       appwriteConfig.databaseId,
-      appwriteConfig.usersCollectionId,
-      userId
+      appwriteConfig.followRequestsCollectionId,
+      [
+        Query.equal("following_id", userId),
+        Query.equal("status", "accepted")
+      ]
     );
 
-    const followers = user.followers || [];
-    return followers
+    return requests.documents.map(request => request.follower_id);
   } catch (error) {
     console.error("Appwrite error :: getUserFollowers :: ", error);
     throw error;
@@ -131,16 +103,42 @@ export async function getUserFollowers(userId: string) {
 // Get user's following
 export async function getUserFollowing(userId: string) {
   try {
-    const user = await databases.getDocument(
+    // Get all accepted follow requests where this user is following others
+    const requests = await databases.listDocuments(
       appwriteConfig.databaseId,
-      appwriteConfig.usersCollectionId,
-      userId
+      appwriteConfig.followRequestsCollectionId,
+      [
+        Query.equal("follower_id", userId),
+        Query.equal("status", "accepted")
+      ]
     );
 
-    const following = user.following || [];
-    return following;
+    return requests.documents.map(request => request.following_id);
   } catch (error) {
     console.error("Appwrite error :: getUserFollowing :: ", error);
+    throw error;
+  }
+}
+
+// Get follow request status
+export async function getFollowRequestStatus(followerId: string, followingId: string) {
+  try {
+    const requests = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followRequestsCollectionId,
+      [
+        Query.equal("follower_id", followerId),
+        Query.equal("following_id", followingId),
+      ]
+    );
+
+    if (requests.documents.length === 0) {
+      return "none";
+    }
+
+    return requests.documents[0].status;
+  } catch (error) {
+    console.error("Appwrite error :: getFollowRequestStatus :: ", error);
     throw error;
   }
 }
@@ -148,42 +146,46 @@ export async function getUserFollowing(userId: string) {
 // Unfollow a user
 export async function unfollowUser(followerId: string, followingId: string) {
   try {
-    // Get current followers/following lists
-    const follower = await databases.getDocument(
+    const requests = await databases.listDocuments(
       appwriteConfig.databaseId,
-      appwriteConfig.usersCollectionId,
-      followerId
+      appwriteConfig.followRequestsCollectionId,
+      [
+        Query.equal("follower_id", followerId),
+        Query.equal("following_id", followingId),
+      ]
     );
 
-    const following = await databases.getDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.usersCollectionId,
-      followingId
-    );
+    if (requests.documents.length > 0) {
+      // Delete the follow request instead of updating to rejected
+      await databases.deleteDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.followRequestsCollectionId,
+        requests.documents[0].$id
+      );
+    }
 
-    // Update follower's following list
-    await databases.updateDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.usersCollectionId,
-      follower.$id,
-      {
-        following: follower.following.filter((id: string) => id !== followingId),
-      }
-    );
-
-    // Update following's followers list
-    await databases.updateDocument(
-      appwriteConfig.databaseId,
-      appwriteConfig.usersCollectionId,
-      following.$id,
-      {
-        followers: following.followers.filter((id: string) => id !== followerId),
-      }
-    );
-
-    return { status: "success" };
+    return true;
   } catch (error) {
     console.error("Appwrite error :: unfollowUser :: ", error);
+    throw error;
+  }
+}
+
+// Get pending follow requests
+export async function getPendingFollowRequests(userId: string) {
+  try {
+    const requests = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.followRequestsCollectionId,
+      [
+        Query.equal("following_id", userId),
+        Query.equal("status", "pending")
+      ]
+    );
+
+    return requests;
+  } catch (error) {
+    console.error("Appwrite error :: getPendingFollowRequests :: ", error);
     throw error;
   }
 }

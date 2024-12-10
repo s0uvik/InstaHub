@@ -7,29 +7,30 @@ import {
   sendFollowRequest,
   unfollowUser,
   updateFollowRequestStatus,
+  getFollowRequestStatus,
 } from "@/lib/appwrite/api/follow";
 
-// Send follow request mutation
 export const useSendFollowRequest = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      followerId,
-      followingId,
-    }: {
-      followerId: string;
-      followingId: string;
-    }) => sendFollowRequest(followerId, followingId),
-    onSuccess: () => {
+    mutationFn: ({ followerId, followingId }: { followerId: string; followingId: string }) =>
+      sendFollowRequest(followerId, followingId),
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_PENDING_FOLLOW_REQUESTS],
+      });
+      // Invalidate both users' followers/following lists
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_FOLLOWERS, variables.followingId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_FOLLOWING, variables.followerId],
       });
     },
   });
 };
 
-// Get pending follow requests query
 export const useGetPendingFollowRequests = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_PENDING_FOLLOW_REQUESTS, userId],
@@ -38,7 +39,6 @@ export const useGetPendingFollowRequests = (userId: string) => {
   });
 };
 
-// Update follow request status mutation
 export const useUpdateFollowRequestStatus = () => {
   const queryClient = useQueryClient();
 
@@ -49,22 +49,25 @@ export const useUpdateFollowRequestStatus = () => {
     }: {
       requestId: string;
       status: "accepted" | "rejected";
+      followerId: string;
+      followingId: string;
     }) => updateFollowRequestStatus(requestId, status),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      // Invalidate pending requests
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_PENDING_FOLLOW_REQUESTS],
       });
+      // Invalidate both users' followers/following lists
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_USER_FOLLOWERS],
+        queryKey: [QUERY_KEYS.GET_USER_FOLLOWERS, variables.followingId],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_USER_FOLLOWING],
+        queryKey: [QUERY_KEYS.GET_USER_FOLLOWING, variables.followerId],
       });
     },
   });
 };
 
-// Get user followers query
 export const useGetUserFollowers = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USER_FOLLOWERS, userId],
@@ -73,7 +76,6 @@ export const useGetUserFollowers = (userId: string) => {
   });
 };
 
-// Get user following query
 export const useGetUserFollowing = (userId: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USER_FOLLOWING, userId],
@@ -82,25 +84,28 @@ export const useGetUserFollowing = (userId: string) => {
   });
 };
 
-// Unfollow user mutation
 export const useUnfollowUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      followerId,
-      followingId,
-    }: {
-      followerId: string;
-      followingId: string;
-    }) => unfollowUser(followerId, followingId),
-    onSuccess: () => {
+    mutationFn: ({ followerId, followingId }: { followerId: string; followingId: string }) =>
+      unfollowUser(followerId, followingId),
+    onSuccess: (_, variables) => {
+      // Invalidate both users' followers/following lists
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_USER_FOLLOWERS],
+        queryKey: [QUERY_KEYS.GET_USER_FOLLOWERS, variables.followingId],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_USER_FOLLOWING],
+        queryKey: [QUERY_KEYS.GET_USER_FOLLOWING, variables.followerId],
       });
     },
+  });
+};
+
+export const useGetFollowRequestStatus = (followerId: string, followingId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_FOLLOW_REQUEST_STATUS, followerId, followingId],
+    queryFn: () => getFollowRequestStatus(followerId, followingId),
+    enabled: !!followerId && !!followingId,
   });
 };
