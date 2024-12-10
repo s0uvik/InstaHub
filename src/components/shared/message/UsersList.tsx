@@ -1,6 +1,5 @@
 import { Models } from "appwrite";
 import { useGetUserFollowing } from "@/lib/react-query/queriesAndMutations/follow";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 type UsersListProps = {

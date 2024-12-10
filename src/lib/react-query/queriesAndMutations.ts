@@ -1,4 +1,10 @@
-import { useInfiniteQuery, useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   createAnonymousSession,
   createPost,
@@ -136,7 +142,7 @@ export const useDeleteSavePost = () => {
         queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_POSTS],
+        queryKey: [QUERY_KEYS.GET_SAVE_POSTS],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -228,7 +234,7 @@ export const useGetUsersByIds = (userIds: string[]) => {
   return useQueries({
     queries: userIds.map((id) => ({
       queryKey: ["user", id],
-      queryFn: () => getUserById(id), 
+      queryFn: () => getUserById(id),
       enabled: !!id,
     })),
   });
