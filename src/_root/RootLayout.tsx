@@ -9,7 +9,7 @@ const RootLayout = () => {
   if (!isAuthenticated) return;
 
   return (
-    <div className=" w-full md:flex">
+    <div className=" w-full lg:flex">
       <TopBar />
       <LeftSidebar />
 

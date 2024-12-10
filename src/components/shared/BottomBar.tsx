@@ -18,11 +18,11 @@ const BottomBar = () => {
             <img
               src={link.imgURL}
               alt={link.label}
-              width={16}
-              height={16}
+              width={22}
+              height={22}
               className={` group-hover:invert-white ${isActive && "invert-white"}`}
             />
-            <p className="tiny-medium text-light-2">{link.label}</p>
+            <p className=" text-xs text-light-2">{link.label}</p>
           </Link>
         );
       })}
