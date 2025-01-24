@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 
-import SignupForm from "./_auth/forms/SignupForm";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,7 +14,8 @@ import {
   Saved,
   Message,
 } from "./_root/pages";
-import SigninPage from "./_auth/pages/SignInPage";
+import SignupPage from "./_auth/pages/SignupPage";
+import SigninPage from "./_auth/pages/SigninPage";
 
 const App = () => {
   return (
@@ -24,7 +24,7 @@ const App = () => {
         {/* Public Routes */}
         <Route element={<AuthLayout />}>
           <Route path="/sign-in" element={<SigninPage />} />
-          <Route path="/sign-up" element={<SignupForm />} />
+          <Route path="/sign-up" element={<SignupPage />} />
         </Route>
 
         {/* Private Routes */}

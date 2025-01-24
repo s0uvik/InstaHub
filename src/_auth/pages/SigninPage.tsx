@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -83,9 +83,9 @@ const SigninPage = () => {
 
       <p className="text-small-regular text-light-2 text-center mt-2">
         Don't have an account?{" "}
-        <a href="/sign-up" className="text-primary-500 font-semibold">
+        <Link to="/sign-up" className="text-primary-500 font-semibold">
           Signup
-        </a>
+        </Link>
       </p>
     </div>
   );

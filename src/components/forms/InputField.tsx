@@ -1,6 +1,7 @@
 import { Control, FieldValues, Path } from "react-hook-form";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "../ui/textarea";
 
 interface InputFieldProps<T extends FieldValues> {
   name: Path<T>;
@@ -24,7 +25,12 @@ const InputField = <T extends FieldValues>({
       <FormItem>
         <FormLabel>{label}</FormLabel>
         <FormControl>
-          <Input type={type} placeholder={placeholder} className="shad-input" {...field} />
+          <>
+            {(type === "text" || type === "email" || type === "password") && (
+              <Input type={type} placeholder={placeholder} className="shad-input" {...field} />
+            )}
+            {type === "textarea" && <Textarea className="shad-textarea" {...field} />}
+          </>
         </FormControl>
         <FormMessage className="text-red" />
       </FormItem>
