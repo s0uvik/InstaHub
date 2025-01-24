@@ -1,18 +1,23 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/AuthContext";
-import { useGetPostById } from "@/lib/react-query/queriesAndMutations";
+import { useDeletePost, useGetPostById } from "@/lib/react-query/queriesAndMutations";
 import { formatDateString } from "@/lib/utils";
 import { Loader } from "@/components/shared";
 import PostStats from "@/components/shared/PostStats";
 import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 
 const PostDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data: post, isPending } = useGetPostById(id || "");
+  const { mutateAsync: deletePost, isPending: isPendingDelete } = useDeletePost();
   const { user } = useUserContext();
 
-  const handleDeletePost = () => {};
-
+  const handleDeletePost = (postId: string, imageId: string) => {
+    window.confirm("Are you sure you want to delete this post?") && deletePost({ postId, imageId });
+    navigate("/");
+  };
   return (
     <div className=" post_details-container">
       {isPending ? (
@@ -44,8 +49,11 @@ const PostDetails = () => {
                       <img src="/assets/icons/edit.svg" alt="edit" width={24} height={24} />
                     </Link>
 
-                    <Button onClick={handleDeletePost}>
-                      <img src="/assets/icons/delete.svg" alt="delete" width={24} height={24} />
+                    <Button
+                      disabled={isPendingDelete}
+                      onClick={() => handleDeletePost(post?.$id, post?.imageId)}
+                    >
+                      {isPendingDelete ? <Loader /> : <Trash2 className=" w-5 h-5 text-red" />}
                     </Button>
                   </>
                 )}

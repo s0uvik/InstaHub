@@ -19,7 +19,7 @@ import SigninPage from "./_auth/pages/SignInPage";
 
 const App = () => {
   return (
-    <main className=" flex h-screen max-w-[1800px] mx-auto">
+    <main className=" flex h-screen max-w-[1600px] mx-auto">
       <Routes>
         {/* Public Routes */}
         <Route element={<AuthLayout />}>
